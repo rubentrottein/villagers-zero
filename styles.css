@@ -389,11 +389,8 @@ body {
 }
 
 .victory-overlay.show {
-    opacity: 1;
+    opacity: .95;
     pointer-events: auto;
-}
-.victory-overlay.show:hover {
-    opacity: .6;
 }
 
 .victory-content {

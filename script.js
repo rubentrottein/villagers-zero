@@ -191,6 +191,9 @@ function triggerVictory() {
     setTimeout(() => {
         const overlay = document.getElementById('victoryOverlay');
         overlay.classList.add('show');
+        overlay.addEventListener('click', () => {
+            overlay.classList.remove('show');
+        });
     }, 3000);
 }
 
