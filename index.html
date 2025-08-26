@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Villager</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">🌱 Project Villager</h1>
+            <p class="subtitle">Fusionnez les graines pour faire naître la vie dans votre village</p>
+        </div>
+
+        <div class="hud">
+            <div class="resources">
+                <div class="resource-item">
+                    <div class="seed-icon seed-basic">🌱</div>
+                    <span>Basiques: <span id="basicSeeds">0</span></span>
+                </div>
+                <div class="resource-item">
+                    <div class="seed-icon seed-wood">🌰</div>
+                    <span>Bois: <span id="woodSeeds">0</span></span>
+                </div>
+                <div class="resource-item">
+                    <div class="seed-icon seed-magic">✨</div>
+                    <span>Magiques: <span id="magicSeeds">0</span></span>
+                </div>
+                <div class="resource-item" id="socialSeedResource" style="display: none;">
+                    <div class="seed-icon seed-social">💖</div>
+                    <span>Sociales: <span id="socialSeeds">0</span></span>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-collect" onclick="collectSeeds()">Collecter Graines</button>
+                <button class="btn btn-mode" onclick="setMode('house')" id="houseModeBtn">
+                    Maison (3🌱)
+                </button>
+                <button class="btn btn-mode" onclick="setMode('farm')" id="farmModeBtn">
+                    Ferme (5🌰)
+                </button>
+                <button class="btn btn-mode" onclick="setMode('lab')" id="labModeBtn">
+                    Labo (2🌱+3🌰)
+                </button>
+                <button class="btn btn-mode" onclick="setMode('academy')" id="academyModeBtn" style="display: none;">
+                    Académie (6✨)
+                </button>
+                <button class="btn btn-mode" onclick="setMode('normal')" id="normalModeBtn">
+                    Mode Normal
+                </button>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="village-grid" id="villageGrid">
+                <div class="mode-indicator" id="modeIndicator">Mode Normal</div>
+            </div>
+            
+            <div class="building-info">
+                <div class="building-type">
+                    <h3>🏠 Maison</h3>
+                    <p>Abrite vos villageois et produit des graines basiques.</p>
+                    <p class="cost">Coût: 3 graines basiques 🌱</p>
+                </div>
+                
+                <div class="building-type">
+                    <h3>🚜 Ferme</h3>
+                    <p>Produit automatiquement des graines de bois.</p>
+                    <p class="cost">Coût: 5 graines de bois 🌰</p>
+                </div>
+
+                <div class="building-type">
+                    <h3>🔬 Laboratoire</h3>
+                    <p>Permet de fusionner les graines pour créer des graines magiques.</p>
+                    <p class="cost">Coût: 2 graines basiques 🌱 + 3 graines de bois 🌰</p>
+                </div>
+
+                <div class="building-type" id="academyInfo" style="display: none;">
+                    <h3>🎓 Académie Magique</h3>
+                    <p>Produit des graines magiques et débloque la fusion de graines sociales.</p>
+                    <p class="cost">Coût: 6 graines magiques ✨</p>
+                </div>
+
+                <div class="fusion-lab" id="fusionLab" style="display: none;">
+                    <h4>🔬 Laboratoire de Fusion</h4>
+                    <div class="fusion-recipe">
+                        2🌱 + 1🌰 = 1✨ (Graines Magiques)
+                    </div>
+                    <div class="fusion-controls">
+                        <button class="fusion-btn" onclick="fuseMagicSeeds()" id="fuseMagicBtn">
+                            Créer Graines Magiques
+                        </button>
+                    </div>
+                    <div id="socialFusion" style="display: none; margin-top: 20px; padding-top: 15px; border-top: 2px solid #e74c3c;">
+                        <div class="fusion-recipe" style="color: #e74c3c; font-weight: bold;">
+                            3✨ + 2🌱 + 3🌰 = 1💖 (Graines Sociales - Objectif Final !)
+                        </div>
+                        <div class="fusion-controls">
+                            <button class="fusion-btn" onclick="fuseSocialSeeds()" id="fuseSocialBtn" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                                Créer Graine Sociale
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <h4>📊 Statistiques du village</h4>
+                    <div class="stat-item">
+                        <span>Maisons:</span>
+                        <span id="houseCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Fermes:</span>
+                        <span id="farmCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Laboratoires:</span>
+                        <span id="labCount">0</span>
+                    </div>
+                    <div class="stat-item" id="academyStat" style="display: none;">
+                        <span>Académies:</span>
+                        <span id="academyCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Habitants:</span>
+                        <span id="villagerCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="narrative-box">
+            <p class="narrative-text" id="narrativeText">
+                Bienvenue dans votre nouveau village ! Commencez par collecter des graines basiques et de bois pour construire vos premiers bâtiments...
+            </p>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+    <div class="fireworks" id="fireworks"></div>
+    
+    <div class="victory-overlay" id="victoryOverlay">
+        <div class="victory-content">
+            <div class="victory-title">🎉 Victoire ! 🎉</div>
+            <div class="victory-text">
+                Félicitations ! Vous avez créé votre première graine sociale !<br>
+                Votre village prend vie et vos habitants commencent à peupler les lieux.<br><br>
+                <strong>Fin de la démo - Merci d'avoir joué à Project Villager !</strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
